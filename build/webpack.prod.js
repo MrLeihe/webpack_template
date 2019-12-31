@@ -3,16 +3,13 @@ const baseConfig = require('./webpack.config')
 const WebpackMerge = require('webpack-merge');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const FirstPlugin = require('../src/plugin/webpack-first-plugin')
 
 module.exports = WebpackMerge(baseConfig, {
     // 开发模式
     mode: 'production',
     plugins: [
-        new BundleAnalyzerPlugin({
-            analyzerHost: '127.0.0.1',
-            analyzerPort: 8001
-        })
+        new FirstPlugin()
     ],
     optimization: {
         minimizer: [

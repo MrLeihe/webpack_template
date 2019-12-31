@@ -13,8 +13,11 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.7.7",
+    "@babel/generator": "^7.7.7",
+    "@babel/parser": "^7.7.7",
     "@babel/polyfill": "^7.7.0",
     "@babel/preset-env": "^7.7.7",
+    "@babel/traverse": "^7.7.4",
     "autoprefixer": "^9.7.3",
     "babel-loader": "^8.0.6",
     "babel-types": "^6.26.0",
