@@ -1,10 +1,6 @@
-import './assets/index.css'
-import './assets/index.less'
-import './assets/img/logo.jpeg'
-import './assets/img/code.png'
-console.log('call me stone')
+import Vue from 'vue'
+import app from './app'
 
-const a = []
-new Promise((resolve, reject) => {
-
-})
+new Vue({
+    render: h => h(app)
+}).$mount('#app')

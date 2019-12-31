@@ -1,29 +1,36 @@
 const path = require('path');
+const os = require('os');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const Happypack = require('happypack')
+const happyThreadPool = Happypack.ThreadPool({ size: os.cpus().length })
 
 module.exports = {
-    // 开发模式
-    mode: 'development',
     // 入口文件
     entry: {
         main: ['@babel/polyfill', path.resolve(__dirname, '../src/main.js')],
-        login: path.resolve(__dirname, '../src/login.js')
     },
     output: {
         filename: '[name].[hash:8].js', // 打包后的文件名
         path: path.resolve(__dirname, '../dist'), //打包后的目录
+    },
+    resolve: {
+        // 别名路径查找
+        alias: {
+            '@': path.resolve(__dirname, '../src')
+        },
+        // 自动解析确定的扩展
+        extensions: ['*', '.js', '.json', '.vue']
     },
     module: {
         rules: [
             {
                 test: /\.js$/,
                 use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env']
-                    }
+                    loader: 'happypack/loader?id=happyBabel',
+
                 },
                 exclude: /node_modules/
             },
@@ -49,6 +56,12 @@ module.exports = {
                         }
                     }
                 }]
+            },
+            {
+                test: /\.vue$/,
+                use: {
+                    loader: 'vue-loader'
+                }
             }
         ]
     },
@@ -65,10 +78,20 @@ module.exports = {
             filename: 'index.html',
             chunks: ['main'], // 与入口文件对应的模块名
         }),
-        new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, '../public/login.html'),
-            filename: 'login.html',
-            chunks: ['login'],
+        // vue 加载器
+        new VueLoaderPlugin(),
+        // 加快打包构建
+        new Happypack({
+            id: 'happyBabel',
+            loaders: [{
+                loader: 'babel-loader',
+                options: {
+                    presets: ['@babel/preset-env'],
+                    cacheDirectory: true
+                }
+            }],
+            threadPool: happyThreadPool // 共享进程池
         })
-    ]
+    ],
+
 }

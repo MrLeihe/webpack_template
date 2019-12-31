@@ -1,0 +1,17 @@
+/** 
+这里单独提一下tree-shaking,是因为这里有个坑。tree-shaking的主要作用是用来清除代码中无用的部分。
+目前在webpack4 我们设置mode为production的时候已经自动开启了tree-shaking。但是要想使其生效，
+生成的代码必须是ES6模块。不能使用其它类型的模块如CommonJS之流。如果使用Babel的话，这里有一个小问题，
+因为Babel的预案（preset）默认会将任何模块类型都转译成CommonJS类型，这样会导致tree-shaking失效。
+修正这个问题也很简单，在.babelrc文件或在webpack.config.js文件中设置modules： false就好了
+*/
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false
+      }
+    ]
+  ]
+}
